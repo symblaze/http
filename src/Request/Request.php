@@ -53,6 +53,9 @@ class Request implements RequestInterface
         return $this->request()->headers;
     }
 
+    /**
+     * @psalm-suppress MixedReturnTypeCoercion - Should return array<string, string|int|float|bool|null>
+     */
     public function all(): array
     {
         return $this->request()->request->all();

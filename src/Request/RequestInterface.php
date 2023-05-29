@@ -38,6 +38,8 @@ interface RequestInterface
 
     /**
      * Retrieves all input data (e.g., request body, query parameters, etc.) as an array.
+     *
+     * @return array<string, string|int|float|bool|null>
      */
     public function all(): array;
 

@@ -43,6 +43,6 @@
     "cs-check": "php-cs-fixer fix --dry-run --diff --ansi",
     "cs-fix": "php-cs-fixer fix --ansi",
     "test": "phpunit tests --testdox",
-    "psalm": "psalm"
+    "psalm": "psalm --no-cache"
   }
 }
