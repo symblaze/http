@@ -1,0 +1,10 @@
+###> IDEs ###
+/.idea
+/.vscode
+###< IDEs ###
+
+###> Dev tools ###
+/vendor
+/.php-cs-fixer.cache
+/.phpunit.result.cache
+###< Dev tools ###
