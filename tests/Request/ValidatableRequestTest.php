@@ -35,4 +35,21 @@ class ValidatableRequestTest extends KernelTestCase
 
         $sut->validate();
     }
+
+    /** @test */
+    public function extra_fields_are_allowed(): void
+    {
+        $requestStack = $this->createMock(RequestStack::class);
+        $validator = $this->createMock(ValidatorInterface::class);
+        $sut = new class($requestStack, $validator) extends ValidatableRequest {
+            public function constraints(): array
+            {
+                return [];
+            }
+        };
+
+        $actual = $sut->allowExtraFields();
+
+        $this->assertTrue($actual);
+    }
 }
