@@ -7,4 +7,5 @@
 /vendor
 /.php-cs-fixer.cache
 /.phpunit.result.cache
+/.phpunit.cache
 ###< Dev tools ###

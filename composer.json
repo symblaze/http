@@ -42,7 +42,7 @@
   "scripts": {
     "cs-check": "php-cs-fixer fix --dry-run --diff --ansi",
     "cs-fix": "php-cs-fixer fix --ansi",
-    "test": "phpunit tests --testdox",
+    "test": "phpunit --testdox",
     "psalm": "psalm --no-cache"
   }
 }
