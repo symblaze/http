@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
-abstract class ValidatAbleRequest extends Request implements ValidatableRequestInterface
+abstract class ValidatableRequest extends Request implements ValidatableRequestInterface
 {
     private ValidatorInterface $validator;
 
@@ -31,7 +31,7 @@ abstract class ValidatAbleRequest extends Request implements ValidatableRequestI
         }
     }
 
-    protected function allowExtraFields(): bool
+    public function allowExtraFields(): bool
     {
         return true;
     }

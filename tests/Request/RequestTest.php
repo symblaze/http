@@ -118,6 +118,19 @@ class RequestTest extends TestCase
     }
 
     /** @test */
+    public function query(): void
+    {
+        $request = SymfonyRequest::create('/?name=John%20Doe');
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+        $sut = new Request($requestStack);
+
+        $actual = $sut->query('name');
+
+        $this->assertEquals('John Doe', $actual);
+    }
+
+    /** @test */
     public function cookie(): void
     {
         $request = new SymfonyRequest();
