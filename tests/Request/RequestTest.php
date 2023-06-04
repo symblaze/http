@@ -152,19 +152,6 @@ class RequestTest extends TestCase
         $this->assertEquals('application/json', $actual);
     }
 
-    /** @test */
-    public function headers(): void
-    {
-        $request = new SymfonyRequest();
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-        $sut = new Request($requestStack);
-
-        $actual = $sut->headers();
-
-        $this->assertSame($request->headers, $actual);
-    }
-
     /**
      * @test
      *

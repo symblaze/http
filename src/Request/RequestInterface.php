@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Symblaze\Bundle\Http\Request;
 
-use Symfony\Component\HttpFoundation\HeaderBag;
-
 /**
  * The Http Request interface is used to represent the request data.
  */
@@ -30,11 +28,6 @@ interface RequestInterface
      * Retrieves the value of the specified HTTP header.
      */
     public function header(string $name, string $default = null): ?string;
-
-    /**
-     * Retrieves the HTTP headers.
-     */
-    public function headers(): HeaderBag;
 
     /**
      * Retrieves all input data (e.g., request body, query parameters, etc.) as an array.
