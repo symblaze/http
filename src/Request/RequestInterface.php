@@ -59,6 +59,11 @@ interface RequestInterface
     public function cookie(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null;
 
     /**
+     * Retrieves a specific JSON value identified by its name. An optional default value can be provided.
+     */
+    public function json(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null;
+
+    /**
      * Retrieves a specific file from the request identified by its name.
      *
      * @psalm-suppress MissingReturnType - @todo: should return UploadedFile

@@ -137,4 +137,9 @@ class Request implements RequestInterface
     {
         return ! empty($this->request()->getContent());
     }
+
+    public function json(string $key, float|bool|int|string|null $default = null): string|int|float|bool|null
+    {
+        return $this->request()->getPayload()->get($key, $default);
+    }
 }
