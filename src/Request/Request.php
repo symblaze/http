@@ -58,7 +58,16 @@ class Request implements RequestInterface
      */
     public function all(): array
     {
-        return $this->request()->request->all();
+        $internalRequest = $this->request();
+        $get = $internalRequest->query->all();
+        $post = $internalRequest->request->all();
+        $data = $get + $post;
+
+        if (! empty($internalRequest->getContent())) {
+            $data += $internalRequest->getPayload()->all();
+        }
+
+        return $data;
     }
 
     public function input(string $key, string|int|float|bool|null $default = null): float|bool|int|string|null
