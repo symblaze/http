@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Symblaze\Bundle\Http\Request;
 
-use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -46,11 +45,6 @@ class Request implements RequestInterface
     public function header(string $name, string $default = null): ?string
     {
         return $this->request()->headers->get($name, $default);
-    }
-
-    public function headers(): HeaderBag
-    {
-        return $this->request()->headers;
     }
 
     /**
