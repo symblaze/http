@@ -59,11 +59,12 @@ class Request implements RequestInterface
     public function all(): array
     {
         $internalRequest = $this->request();
+
         $get = $internalRequest->query->all();
         $post = $internalRequest->request->all();
         $data = $get + $post;
 
-        if (! empty($internalRequest->getContent())) {
+        if ($this->hasContent()) {
             $data += $internalRequest->getPayload()->all();
         }
 
@@ -74,7 +75,7 @@ class Request implements RequestInterface
     {
         $internalRequest = $this->request();
 
-        if ('' === $internalRequest->getContent()) {
+        if (! $this->hasContent()) {
             return $internalRequest->request->get($key, $default);
         }
 
@@ -132,5 +133,10 @@ class Request implements RequestInterface
     public function hasHeader(string $key): bool
     {
         return $this->request()->headers->has($key);
+    }
+
+    private function hasContent(): bool
+    {
+        return ! empty($this->request()->getContent());
     }
 }
