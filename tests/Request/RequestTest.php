@@ -317,4 +317,38 @@ class RequestTest extends TestCase
         $this->assertTrue($sut->hasHeader('Content-Type'));
         $this->assertFalse($sut->hasHeader('Accept'));
     }
+
+    /** @test */
+    public function json(): void
+    {
+        $request = SymfonyRequest::create(
+            uri: '/',
+            method: 'POST',
+            content: '{"name":"John Doe"}'
+        );
+        $request->headers->set('Content-Type', 'application/json');
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+        $sut = new Request($requestStack);
+
+        $this->assertSame('John Doe', $sut->json('name'));
+        $this->assertNull($sut->json('email'));
+    }
+
+    /** @test */
+    public function has_json(): void
+    {
+        $request = SymfonyRequest::create(
+            uri: '/',
+            method: 'POST',
+            content: '{"name":"John Doe"}'
+        );
+        $request->headers->set('Content-Type', 'application/json');
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+        $sut = new Request($requestStack);
+
+        $this->assertTrue($sut->hasJson('name'));
+        $this->assertFalse($sut->hasJson('email'));
+    }
 }
