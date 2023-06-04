@@ -58,6 +58,35 @@ class RequestTest extends TestCase
         ];
     }
 
+    public static function inputDataProvider(): array
+    {
+        return [
+            'empty' => [
+                'request' => SymfonyRequest::create(uri: '/'),
+                'key' => 'foo',
+                'expected' => null,
+            ],
+            'parameters' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/',
+                    method: 'POST',
+                    parameters: ['foo' => 'bar']
+                ),
+                'key' => 'foo',
+                'expected' => 'bar',
+            ],
+            'json_content' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/',
+                    method: 'POST',
+                    content: '{"foo":"bar"}'
+                ),
+                'key' => 'foo',
+                'expected' => 'bar',
+            ],
+        ];
+    }
+
     /** @test */
     public function path(): void
     {
@@ -152,18 +181,20 @@ class RequestTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @test */
-    public function input(): void
+    /**
+     * @test
+     *
+     * @dataProvider inputDataProvider
+     */
+    public function input(SymfonyRequest $request, string $key, ?string $expected): void
     {
-        $request = new SymfonyRequest();
-        $request->request->set('name', 'John Doe');
         $requestStack = new RequestStack();
         $requestStack->push($request);
         $sut = new Request($requestStack);
 
-        $actual = $sut->input('name');
+        $actual = $sut->input($key);
 
-        $this->assertEquals('John Doe', $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /** @test */

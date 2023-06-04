@@ -72,7 +72,13 @@ class Request implements RequestInterface
 
     public function input(string $key, string|int|float|bool|null $default = null): float|bool|int|string|null
     {
-        return $this->request()->request->get($key, $default);
+        $internalRequest = $this->request();
+
+        if ('' === $internalRequest->getContent()) {
+            return $internalRequest->request->get($key, $default);
+        }
+
+        return $this->request()->getPayload()->get($key, $default);
     }
 
     public function query(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
