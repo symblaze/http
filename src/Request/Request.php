@@ -60,9 +60,7 @@ class Request implements RequestInterface
     {
         $internalRequest = $this->request();
 
-        $get = $internalRequest->query->all();
-        $post = $internalRequest->request->all();
-        $data = $get + $post;
+        $data = $internalRequest->query->all() + $internalRequest->request->all();
 
         if ($this->hasContent()) {
             $data += $internalRequest->getPayload()->all();
