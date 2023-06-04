@@ -99,4 +99,9 @@ interface RequestInterface
      * Checks if the specified HTTP header exists.
      */
     public function hasHeader(string $key): bool;
+
+    /**
+     * Checks if a specific JSON value exists within the request data.
+     */
+    public function hasJson(string $key): bool;
 }

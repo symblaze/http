@@ -142,4 +142,9 @@ class Request implements RequestInterface
     {
         return $this->request()->getPayload()->get($key, $default);
     }
+
+    public function hasJson(string $key): bool
+    {
+        return $this->request()->getPayload()->has($key);
+    }
 }
