@@ -6,14 +6,14 @@ namespace Symblaze\Bundle\Http\Tests\Request;
 
 use Symblaze\Bundle\Http\Exception\ValidationFailedException;
 use Symblaze\Bundle\Http\Request\ValidatableRequest;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symblaze\Bundle\Http\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ValidatableRequestTest extends KernelTestCase
+class ValidatableRequestTest extends TestCase
 {
     /** @test */
     public function invalid_request_will_throw(): void

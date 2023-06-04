@@ -12,6 +12,81 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestTest extends TestCase
 {
+    public static function allDataProvider(): array
+    {
+        return [
+            'empty' => [
+                'request' => SymfonyRequest::create(uri: '/'),
+                'expected' => [],
+            ],
+            'query' => [
+                'request' => SymfonyRequest::create(uri: '/?foo=bar'),
+                'expected' => ['foo' => 'bar'],
+            ],
+            'request' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/',
+                    method: 'POST',
+                    parameters: ['foo' => 'bar']
+                ),
+                'expected' => ['foo' => 'bar'],
+            ],
+            'query_and_request' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/?foo=bar',
+                    method: 'POST',
+                    parameters: ['bar' => 'baz']
+                ),
+                'expected' => ['foo' => 'bar', 'bar' => 'baz'],
+            ],
+            'json_content' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/',
+                    method: 'POST',
+                    content: '{"foo":"bar"}'
+                ),
+                'expected' => ['foo' => 'bar'],
+            ],
+            'json_content_with_query' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/?bar=baz',
+                    method: 'POST',
+                    content: '{"foo":"bar"}'
+                ),
+                'expected' => ['foo' => 'bar', 'bar' => 'baz'],
+            ],
+        ];
+    }
+
+    public static function inputDataProvider(): array
+    {
+        return [
+            'empty' => [
+                'request' => SymfonyRequest::create(uri: '/'),
+                'key' => 'foo',
+                'expected' => null,
+            ],
+            'parameters' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/',
+                    method: 'POST',
+                    parameters: ['foo' => 'bar']
+                ),
+                'key' => 'foo',
+                'expected' => 'bar',
+            ],
+            'json_content' => [
+                'request' => SymfonyRequest::create(
+                    uri: '/',
+                    method: 'POST',
+                    content: '{"foo":"bar"}'
+                ),
+                'key' => 'foo',
+                'expected' => 'bar',
+            ],
+        ];
+    }
+
     /** @test */
     public function path(): void
     {
@@ -90,31 +165,36 @@ class RequestTest extends TestCase
         $this->assertSame($request->headers, $actual);
     }
 
-    /** @test */
-    public function all(): void
+    /**
+     * @test
+     *
+     * @dataProvider allDataProvider
+     */
+    public function all(SymfonyRequest $request, array $expected): void
     {
-        $request = new SymfonyRequest();
         $requestStack = new RequestStack();
         $requestStack->push($request);
         $sut = new Request($requestStack);
 
         $actual = $sut->all();
 
-        $this->assertSame($request->request->all(), $actual);
+        $this->assertEquals($expected, $actual);
     }
 
-    /** @test */
-    public function input(): void
+    /**
+     * @test
+     *
+     * @dataProvider inputDataProvider
+     */
+    public function input(SymfonyRequest $request, string $key, ?string $expected): void
     {
-        $request = new SymfonyRequest();
-        $request->request->set('name', 'John Doe');
         $requestStack = new RequestStack();
         $requestStack->push($request);
         $sut = new Request($requestStack);
 
-        $actual = $sut->input('name');
+        $actual = $sut->input($key);
 
-        $this->assertEquals('John Doe', $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /** @test */

@@ -58,12 +58,26 @@ class Request implements RequestInterface
      */
     public function all(): array
     {
-        return $this->request()->request->all();
+        $internalRequest = $this->request();
+
+        $data = $internalRequest->query->all() + $internalRequest->request->all();
+
+        if ($this->hasContent()) {
+            $data += $internalRequest->getPayload()->all();
+        }
+
+        return $data;
     }
 
     public function input(string $key, string|int|float|bool|null $default = null): float|bool|int|string|null
     {
-        return $this->request()->request->get($key, $default);
+        $internalRequest = $this->request();
+
+        if (! $this->hasContent()) {
+            return $internalRequest->request->get($key, $default);
+        }
+
+        return $internalRequest->getPayload()->get($key, $default);
     }
 
     public function query(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
@@ -117,5 +131,10 @@ class Request implements RequestInterface
     public function hasHeader(string $key): bool
     {
         return $this->request()->headers->has($key);
+    }
+
+    private function hasContent(): bool
+    {
+        return ! empty($this->request()->getContent());
     }
 }
