@@ -14,6 +14,9 @@ class Request implements RequestInterface
 {
     public function __construct(protected RequestStack $requestStack)
     {
+        if (null === $this->requestStack->getCurrentRequest()) {
+            $this->requestStack->push(SymfonyRequest::createFromGlobals());
+        }
     }
 
     public function path(): string
@@ -23,13 +26,7 @@ class Request implements RequestInterface
 
     public function request(): SymfonyRequest
     {
-        $currentRequest = $this->requestStack->getCurrentRequest();
-        assert(
-            ! is_null($currentRequest),
-            'Current request is null. Please check if you are using the request outside of the request scope.'
-        );
-
-        return $currentRequest;
+        return $this->requestStack->getCurrentRequest();
     }
 
     public function method(): string
@@ -61,6 +58,11 @@ class Request implements RequestInterface
         }
 
         return $data;
+    }
+
+    private function hasContent(): bool
+    {
+        return ! empty($this->request()->getContent());
     }
 
     public function input(string $key, string|int|float|bool|null $default = null): float|bool|int|string|null
@@ -125,11 +127,6 @@ class Request implements RequestInterface
     public function hasHeader(string $key): bool
     {
         return $this->request()->headers->has($key);
-    }
-
-    private function hasContent(): bool
-    {
-        return ! empty($this->request()->getContent());
     }
 
     public function json(string $key, float|bool|int|string|null $default = null): string|int|float|bool|null

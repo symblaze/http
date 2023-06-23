@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class RequestTest extends TestCase
+final class RequestTest extends TestCase
 {
     public static function allDataProvider(): array
     {
@@ -127,19 +127,6 @@ class RequestTest extends TestCase
     }
 
     /** @test */
-    public function header(): void
-    {
-        $request = new SymfonyRequest();
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-        $sut = new Request($requestStack);
-
-        $actual = $sut->header('Content-Type');
-
-        $this->assertEquals($request->headers->get('Content-Type'), $actual);
-    }
-
-    /** @test */
     public function header_default_value(): void
     {
         $request = new SymfonyRequest();
@@ -152,20 +139,17 @@ class RequestTest extends TestCase
         $this->assertEquals('application/json', $actual);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider allDataProvider
-     */
-    public function all(SymfonyRequest $request, array $expected): void
+    /** @test */
+    public function header(): void
     {
+        $request = new SymfonyRequest();
         $requestStack = new RequestStack();
         $requestStack->push($request);
         $sut = new Request($requestStack);
 
-        $actual = $sut->all();
+        $actual = $sut->header('Content-Type');
 
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($request->headers->get('Content-Type'), $actual);
     }
 
     /**
@@ -337,5 +321,45 @@ class RequestTest extends TestCase
 
         $this->assertTrue($sut->hasJson('name'));
         $this->assertFalse($sut->hasJson('email'));
+    }
+
+    /** @test */
+    public function is_should_throw_exception_if_request_stack_is_empty(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $sut = new Request(new RequestStack());
+
+        $sut->request();
+    }
+
+    /** @test */
+    public function it_generate_internal_request_from_globals_if_request_stack_is_empty(): void
+    {
+        $sut = new Request(new RequestStack());
+
+        $actual = $sut->request();
+
+        $this->assertSame($_SERVER, $actual->server->all());
+        $this->assertSame($_GET, $actual->query->all());
+        $this->assertSame($_POST, $actual->request->all());
+        $this->assertSame($_COOKIE, $actual->cookies->all());
+        $this->assertSame($_FILES, $actual->files->all());
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider allDataProvider
+     */
+    public function all(SymfonyRequest $request, array $expected): void
+    {
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+        $sut = new Request($requestStack);
+
+        $actual = $sut->all();
+
+        $this->assertEquals($expected, $actual);
     }
 }
