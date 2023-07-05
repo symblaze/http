@@ -36,12 +36,7 @@ class ValidationFailedExceptionTest extends TestCase
 
         $this->assertInstanceOf(JsonResponse::class, $actual);
         $this->assertSame(Response::HTTP_BAD_REQUEST, $actual->getStatusCode());
-        $this->assertSame(
-            json_encode([
-                'errors' => [],
-            ], JSON_THROW_ON_ERROR),
-            $actual->getContent()
-        );
+        $this->assertSame(json_encode(['errors' => []], JSON_THROW_ON_ERROR), $actual->getContent());
     }
 
     /** @test */

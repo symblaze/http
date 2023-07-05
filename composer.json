@@ -23,6 +23,7 @@
     "php": "^8.2",
     "symfony/config": "^6.3",
     "symfony/dependency-injection": "^6.3",
+    "symfony/framework-bundle": "^6.3",
     "symfony/http-kernel": "^6.3",
     "symfony/validator": "^6.3"
   },
