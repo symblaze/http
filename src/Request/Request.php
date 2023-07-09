@@ -26,7 +26,10 @@ class Request implements RequestInterface
 
     public function request(): SymfonyRequest
     {
-        return $this->requestStack->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
+        assert($request instanceof SymfonyRequest);
+
+        return $request;
     }
 
     public function method(): string
