@@ -1,0 +1,36 @@
+name: 🚀 CI
+on: [ push, pull_request ]
+jobs:
+  ci:
+    name: "🚀 CI"
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest, windows-latest, macos-latest ]
+        php-version: [ 8.2 ]
+    steps:
+
+      # --------- Setup steps ---------
+      - name: "📦 Checkout"
+        uses: actions/checkout@v3
+
+      - name: "🐘 Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: "pcov"
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+          extensions: pcov, xdebug
+
+      - name: "📦 Install dependencies"
+        uses: ramsey/composer-install@v2
+
+      # --------- Run steps ---------
+      - name: "🧪 Run tests"
+        run: "composer test"
+
+      - name: "🧹 PHP CS Fixer"
+        run: "composer cs-fix"
+
+      - name: "🔍 Psalm"
+        run: "composer psalm"

@@ -9,6 +9,6 @@ use PHPUnit\Framework\TestCase as PHPUnit;
 /**
  * Base test case class.
  */
-class TestCase extends PHPUnit
+abstract class TestCase extends PHPUnit
 {
 }

@@ -12,7 +12,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface as ViolationList;
 
-class ValidationFailedExceptionTest extends TestCase
+final class ValidationFailedExceptionTest extends TestCase
 {
     /** @test */
     public function validation_failed_exception(): void
