@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ValidatableRequestTest extends TestCase
+final class ValidatableRequestTest extends TestCase
 {
     /** @test */
     public function invalid_request_will_throw(): void
