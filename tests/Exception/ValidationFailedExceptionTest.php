@@ -40,15 +40,37 @@ class ValidationFailedExceptionTest extends TestCase
     }
 
     /** @test */
-    public function errors(): void
+    public function errors_method_adds_error_code_if_exists(): void
     {
+        $propertyPath = 'foo'.time();
+        $code = '500';
         $violation = $this->createMock(ConstraintViolation::class);
-        $violation->method('getPropertyPath')->willReturn('foo');
+        $violation->method('getPropertyPath')->willReturn($propertyPath);
+        $violation->method('getCode')->willReturn($code);
         $sut = new ValidationFailedException([], new ConstraintViolationList([$violation]));
 
         $actual = $sut->errors();
 
-        $propertyPath = $violation->getPropertyPath();
+        $this->assertSame([
+            $propertyPath => [
+                'title' => sprintf("The value '%s' is invalid for '%s'", $violation->getInvalidValue(), $propertyPath),
+                'detail' => $violation->getMessage(),
+                'source' => ['pointer' => $propertyPath],
+                'code' => $code,
+            ],
+        ], $actual);
+    }
+
+    /** @test */
+    public function errors(): void
+    {
+        $propertyPath = 'foo'.time();
+        $violation = $this->createMock(ConstraintViolation::class);
+        $violation->method('getPropertyPath')->willReturn($propertyPath);
+        $sut = new ValidationFailedException([], new ConstraintViolationList([$violation]));
+
+        $actual = $sut->errors();
+
         $this->assertSame([
             $propertyPath => [
                 'title' => sprintf("The value '%s' is invalid for '%s'", $violation->getInvalidValue(), $propertyPath),
