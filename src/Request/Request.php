@@ -26,7 +26,10 @@ class Request implements RequestInterface
 
     public function request(): SymfonyRequest
     {
-        return $this->requestStack->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
+        assert($request instanceof SymfonyRequest);
+
+        return $request;
     }
 
     public function method(): string
@@ -65,7 +68,7 @@ class Request implements RequestInterface
         return ! empty($this->request()->getContent());
     }
 
-    public function input(string $key, string|int|float|bool|null $default = null): float|bool|int|string|null
+    public function input(string $key, string|int|float|bool $default = null): float|bool|int|string|null
     {
         $internalRequest = $this->request();
 
@@ -76,12 +79,12 @@ class Request implements RequestInterface
         return $internalRequest->getPayload()->get($key, $default);
     }
 
-    public function query(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
+    public function query(string $key, string|int|float|bool $default = null): string|int|float|bool|null
     {
         return $this->request()->query->get($key, $default);
     }
 
-    public function cookie(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
+    public function cookie(string $key, string|int|float|bool $default = null): string|int|float|bool|null
     {
         return $this->request()->cookies->get($key, $default);
     }
@@ -129,7 +132,7 @@ class Request implements RequestInterface
         return $this->request()->headers->has($key);
     }
 
-    public function json(string $key, float|bool|int|string|null $default = null): string|int|float|bool|null
+    public function json(string $key, float|bool|int|string $default = null): string|int|float|bool|null
     {
         return $this->request()->getPayload()->get($key, $default);
     }

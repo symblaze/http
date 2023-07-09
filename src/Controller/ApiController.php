@@ -33,7 +33,7 @@ abstract class ApiController extends AbstractController
         return $this->json($this->responseBody($this->successKey, $data), Response::HTTP_OK, $headers, $context);
     }
 
-    protected function responseBody(?string $key, mixed $data): array
+    protected function responseBody(?string $key, mixed $data): mixed
     {
         return $key ? [$key => $data] : $data;
     }
