@@ -35,3 +35,41 @@ methods are available:
 | badRequest  | 400              | create, update            |
 
 And more methods will be added in the future.
+
+Each method expects the `$data` as the first parameter, and an optional second parameter `$groups` to define the
+serialization groups.
+
+## Example
+
+Below is an example of an Article controller that uses the Api controller:
+
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Controller;
+
+use App\Entity\Article;
+use App\Repository\ArticleRepository;
+use App\Article\CreateArticleRequest;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class ArticleController extends ApiController
+{
+    public function get(Article $article): JsonResponse
+    {
+        return $this->ok($article, ['article:read']);
+    }
+    
+    public function create(CreateArticleRequest $request): JsonResponse
+    {
+       // authorize and validate the request
+        
+       // create the article $article
+       
+       // ...
+       
+       return $this->created($article, ['article:read']);  
+    }
+}
+```
