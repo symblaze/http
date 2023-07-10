@@ -12,6 +12,10 @@ Use [Composer] to install the bundle:
 composer require symblaze/http-bundle
 ```
 
+## Usage
+
+You can find the documentation in the [doc](/doc) directory.
+
 ## License
 
-This bundle is released under the [MIT license](LICENSE).
+This bundle is released under the [MIT license](LICENSE.md).
