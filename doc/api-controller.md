@@ -50,7 +50,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Repository\ArticleRepository;
 use App\Article\CreateArticleRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
