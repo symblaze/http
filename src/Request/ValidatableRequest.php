@@ -31,6 +31,9 @@ abstract class ValidatableRequest extends Request implements ValidatableRequestI
         }
     }
 
+    /**
+     * @return bool Whether to allow extra fields in the request data
+     */
     public function allowExtraFields(): bool
     {
         return true;
