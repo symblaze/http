@@ -22,3 +22,9 @@ All exceptions thrown by the bundle are based on `\Symblaze\Bundle\Http\Exceptio
 Symfony's Http exception. This makes it easy for you handle all exceptions if required. In Addition,
 an `\Symblaze\Bundle\Http\Exception\RenderableExceptionInterface` interface allows you to render create Http responses
 from your [exceptions](./exceptions.md).
+
+## Validation
+
+The bundle provides two steps of validation. The first step is the validation of the request data that is done by the
+[auto validation of the request](./requests.md#auto-validating-requests). The second step or the second type of
+validation is the [validation of the entities](./validator.md).
