@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Symblaze\Bundle\Http\Request;
 
-use Symblaze\Bundle\Http\Exception\ValidationFailedException;
+use Symblaze\Bundle\Http\Validation\ValidatorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class ValidatableRequest extends Request implements ValidatableRequestInterface
@@ -24,11 +23,8 @@ abstract class ValidatableRequest extends Request implements ValidatableRequestI
     public function validate(): void
     {
         $constraints = new Collection($this->constraints(), null, null, $this->allowExtraFields());
-        $violations = $this->validator->validate($this->all(), $constraints);
 
-        if ($violations->count() > 0) {
-            throw new ValidationFailedException($this->all(), $violations);
-        }
+        $this->validator->abortUnlessValid($this->all(), $constraints);
     }
 
     /**

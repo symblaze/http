@@ -7,11 +7,12 @@ namespace Symblaze\Bundle\Http\Tests\Request;
 use Symblaze\Bundle\Http\Exception\ValidationFailedException;
 use Symblaze\Bundle\Http\Request\ValidatableRequest;
 use Symblaze\Bundle\Http\Tests\TestCase;
+use Symblaze\Bundle\Http\Validation\Validator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidator;
 
 final class ValidatableRequestTest extends TestCase
 {
@@ -20,10 +21,11 @@ final class ValidatableRequestTest extends TestCase
     {
         $requestStack = $this->createMock(RequestStack::class);
         $requestStack->method('getCurrentRequest')->willReturn(Request::create('/'));
-        $validator = $this->createMock(ValidatorInterface::class);
+        $symfonyValidator = $this->createMock(SymfonyValidator::class);
         $violations = $this->createMock(ConstraintViolationListInterface::class);
         $violations->method('count')->willReturn(1);
-        $validator->method('validate')->willReturn($violations);
+        $symfonyValidator->method('validate')->willReturn($violations);
+        $validator = new Validator($symfonyValidator);
         $sut = new class($requestStack, $validator) extends ValidatableRequest {
             public function constraints(): array
             {
@@ -40,7 +42,8 @@ final class ValidatableRequestTest extends TestCase
     public function extra_fields_are_allowed(): void
     {
         $requestStack = $this->createMock(RequestStack::class);
-        $validator = $this->createMock(ValidatorInterface::class);
+        $symfonyValidator = $this->createMock(SymfonyValidator::class);
+        $validator = new Validator($symfonyValidator);
         $sut = new class($requestStack, $validator) extends ValidatableRequest {
             public function constraints(): array
             {
