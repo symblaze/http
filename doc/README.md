@@ -28,3 +28,10 @@ from your [exceptions](./exceptions.md).
 The bundle provides two steps of validation. The first step is the validation of the request data that is done by the
 [auto validation of the request](./requests.md#auto-validating-requests). The second step or the second type of
 validation is the [validation of the entities](./validator.md).
+
+## Authorization
+
+The bundle provides an [abstract Voter](./authorization.md#abstract-voter) class built on top of the Symfony's Voter
+class. It helps you to build your
+authorization logic without the need to write a boilerplate code, and should be designed around the standard methods
+of an API.
