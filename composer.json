@@ -31,7 +31,8 @@
     "friendsofphp/php-cs-fixer": "^3.17",
     "phpunit/phpunit": "^10.2",
     "roave/security-advisories": "dev-latest",
-    "vimeo/psalm": "^5.12"
+    "vimeo/psalm": "^5.12",
+    "symfony/yaml": "^6.3"
   },
   "config": {
     "sort-packages": true,
