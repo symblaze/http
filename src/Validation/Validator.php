@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Symblaze\Bundle\Http\Validation;
 
 use Symblaze\Bundle\Http\Exception\ValidationFailedException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidator;
@@ -14,8 +15,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidator
  */
 final readonly class Validator implements ValidatorInterface
 {
-    public function __construct(private SymfonyValidator $symfonyValidator)
-    {
+    public function __construct(
+        private SymfonyValidator $symfonyValidator,
+        private ParameterBagInterface $parameterBag
+    ) {
     }
 
     public function abortUnlessValid(
