@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Symblaze\Bundle\Http\Tests\DependencyInjection;
 
+use Symblaze\Bundle\Http\DependencyInjection\Configuration;
 use Symblaze\Bundle\Http\DependencyInjection\HttpBundleExtension;
 use Symblaze\Bundle\Http\Tests\TestCase;
 use Symblaze\Bundle\Http\Validation\ValidatorInterface;
@@ -20,5 +21,16 @@ final class HttpBundleExtensionTest extends TestCase
         $sut->load([], $containerBuilder);
 
         $this->assertTrue($containerBuilder->has(ValidatorInterface::class));
+    }
+
+    /** @test */
+    public function it_loads_the_configuration(): void
+    {
+        $containerBuilder = new ContainerBuilder();
+        $sut = new HttpBundleExtension();
+
+        $configuration = $sut->getConfiguration([], $containerBuilder);
+
+        $this->assertInstanceOf(Configuration::class, $configuration);
     }
 }
