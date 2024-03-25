@@ -1,8 +1,8 @@
-name: 🚀 CI
+name: CI
 on: [ push, pull_request ]
 jobs:
   ci:
-    name: "🚀 CI"
+    name: "CI"
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -11,10 +11,10 @@ jobs:
     steps:
 
       # --------- Setup steps ---------
-      - name: "📦 Checkout"
+      - name: "Checkout"
         uses: actions/checkout@v3
 
-      - name: "🐘 Setup PHP"
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
           coverage: "pcov"
@@ -22,15 +22,15 @@ jobs:
           ini-values: memory_limit=-1
           extensions: pcov, xdebug
 
-      - name: "📦 Install dependencies"
+      - name: "Install dependencies"
         uses: ramsey/composer-install@v2
 
       # --------- Run steps ---------
-      - name: "🧪 Run tests"
+      - name: "Unit Tests"
         run: "composer test"
 
-      - name: "🧹 PHP CS Fixer"
+      - name: "Coding style"
         run: "composer cs-fix"
 
-      - name: "🔍 Psalm"
+      - name: "Static code analysis"
         run: "composer psalm"
