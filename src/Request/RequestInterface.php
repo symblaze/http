@@ -27,7 +27,7 @@ interface RequestInterface
     /**
      * Retrieves the value of the specified HTTP header.
      */
-    public function header(string $name, string $default = null): ?string;
+    public function header(string $name, ?string $default = null): ?string;
 
     /**
      * Retrieves all input data (e.g., request body, query parameters, etc.) as an array.
@@ -39,22 +39,22 @@ interface RequestInterface
     /**
      * Retrieves a specific input value from the request data identified by its name. An optional default value can be provided.
      */
-    public function input(string $key, string|int|float|bool $default = null): string|int|float|bool|null;
+    public function input(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null;
 
     /**
      * Retrieves a specific query parameter value identified by its name. An optional default value can be provided.
      */
-    public function query(string $key, string|int|float|bool $default = null): string|int|float|bool|null;
+    public function query(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null;
 
     /**
      * Retrieves a specific cookie value identified by its name. An optional default value can be provided.
      */
-    public function cookie(string $key, string|int|float|bool $default = null): string|int|float|bool|null;
+    public function cookie(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null;
 
     /**
      * Retrieves a specific JSON value identified by its name. An optional default value can be provided.
      */
-    public function json(string $key, string|int|float|bool $default = null): string|int|float|bool|null;
+    public function json(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null;
 
     /**
      * Retrieves a specific file from the request identified by its name.

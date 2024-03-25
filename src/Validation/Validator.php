@@ -20,8 +20,8 @@ final readonly class Validator implements ValidatorInterface
 
     public function abortUnlessValid(
         mixed $value,
-        array|Constraint $constraints = null,
-        array|GroupSequence|string $groups = null
+        array|Constraint|null $constraints = null,
+        array|GroupSequence|string|null $groups = null
     ): void {
         $violations = $this->symfonyValidator->validate($value, $constraints, $groups);
 
