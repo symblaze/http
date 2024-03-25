@@ -35,7 +35,7 @@ abstract class ApiController extends AbstractController
 
     protected function responseBody(?string $key, mixed $data): mixed
     {
-        return $key ? [$key => $data] : $data;
+        return is_string($key) && ! empty($key) ? [$key => $data] : $data;
     }
 
     /**

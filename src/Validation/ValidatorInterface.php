@@ -27,7 +27,7 @@ interface ValidatorInterface
      */
     public function abortUnlessValid(
         mixed $value,
-        Constraint|array $constraints = null,
-        string|GroupSequence|array $groups = null
+        Constraint|array|null $constraints = null,
+        string|GroupSequence|array|null $groups = null
     ): void;
 }

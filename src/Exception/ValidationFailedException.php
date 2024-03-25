@@ -31,19 +31,14 @@ class ValidationFailedException extends HttpException implements RenderableExcep
         return new JsonResponse(['errors' => $this->errors()], Response::HTTP_BAD_REQUEST);
     }
 
-    public function errors(): array
+    private function errors(): array
     {
         $errors = [];
 
         foreach ($this->violations as $violation) {
             $propertyPath = $this->getPropertyPath($violation);
-            $invalidValue = $this->getInvalidValue($violation);
 
-            $errors[$propertyPath] = [
-                'title' => sprintf("The value '%s' is invalid for '%s'", $invalidValue, $propertyPath),
-                'detail' => $violation->getMessage(),
-                'source' => ['pointer' => $propertyPath],
-            ];
+            $errors[$propertyPath][] = $violation->getMessage();
 
             if (! is_null($violation->getCode())) {
                 $errors[$propertyPath]['code'] = $violation->getCode();
