@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Symblaze\Bundle\Http\Tests\Exception;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use Symblaze\Bundle\Http\Exception\ValidationFailedException;
+use Symblaze\Bundle\Http\Tests\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface as ViolationList;
 
+#[CoversClass(ValidationFailedException::class)]
 final class ValidationFailedExceptionTest extends TestCase
 {
-    /** @test */
-    public function validation_failed_exception(): void
+    #[Test]
+    public function constructor(): void
     {
         $input = ['name' => 'John Doe', 'age' => 17];
         $violations = $this->createMock(ViolationList::class);
@@ -26,8 +29,8 @@ final class ValidationFailedExceptionTest extends TestCase
         $this->assertSame($violations, $sut->getViolations());
     }
 
-    /** @test */
-    public function render(): void
+    #[Test]
+    public function render_returns_a_json_response(): void
     {
         $violations = $this->createMock(ViolationList::class);
         $sut = new ValidationFailedException([], $violations);
@@ -39,44 +42,28 @@ final class ValidationFailedExceptionTest extends TestCase
         $this->assertSame(json_encode(['errors' => []], JSON_THROW_ON_ERROR), $actual->getContent());
     }
 
-    /** @test */
-    public function errors_method_adds_error_code_if_exists(): void
+    #[Test]
+    public function errors_are_rendered_as_object_of_array(): void
     {
-        $propertyPath = 'foo'.time();
-        $code = '500';
-        $violation = $this->createMock(ConstraintViolation::class);
-        $violation->method('getPropertyPath')->willReturn($propertyPath);
-        $violation->method('getCode')->willReturn($code);
-        $sut = new ValidationFailedException([], new ConstraintViolationList([$violation]));
+        $violations = [];
+        $expected = [];
 
-        $actual = $sut->errors();
+        foreach (range(1, 3) as $i) {
+            $path = $this->faker->word();
+            $message = $this->faker->sentence();
+            $expected[$path][] = $message;
 
-        $this->assertSame([
-            $propertyPath => [
-                'title' => sprintf("The value '%s' is invalid for '%s'", $violation->getInvalidValue(), $propertyPath),
-                'detail' => $violation->getMessage(),
-                'source' => ['pointer' => $propertyPath],
-                'code' => $code,
-            ],
-        ], $actual);
-    }
+            $violation = $this->createMock(ConstraintViolation::class);
+            $violation->method('getPropertyPath')->willReturn($path);
+            $violation->method('getMessage')->willReturn($message);
 
-    /** @test */
-    public function errors(): void
-    {
-        $propertyPath = 'foo'.time();
-        $violation = $this->createMock(ConstraintViolation::class);
-        $violation->method('getPropertyPath')->willReturn($propertyPath);
-        $sut = new ValidationFailedException([], new ConstraintViolationList([$violation]));
+            $violations[] = $violation;
+        }
+        $sut = new ValidationFailedException([], new ConstraintViolationList($violations));
 
-        $actual = $sut->errors();
+        $response = $sut->render();
+        $actual = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR)['errors'];
 
-        $this->assertSame([
-            $propertyPath => [
-                'title' => sprintf("The value '%s' is invalid for '%s'", $violation->getInvalidValue(), $propertyPath),
-                'detail' => $violation->getMessage(),
-                'source' => ['pointer' => $propertyPath],
-            ],
-        ], $actual);
+        $this->assertSame($expected, $actual);
     }
 }
