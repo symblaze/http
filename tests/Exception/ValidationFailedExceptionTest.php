@@ -56,6 +56,7 @@ final class ValidationFailedExceptionTest extends TestCase
             $violation = $this->createMock(ConstraintViolation::class);
             $violation->method('getPropertyPath')->willReturn($path);
             $violation->method('getMessage')->willReturn($message);
+            $violation->method('getCode')->willReturn($this->faker->uuid());
 
             $violations[] = $violation;
         }

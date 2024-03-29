@@ -39,10 +39,6 @@ class ValidationFailedException extends HttpException implements RenderableExcep
             $propertyPath = $this->getPropertyPath($violation);
 
             $errors[$propertyPath][] = $violation->getMessage();
-
-            if (! is_null($violation->getCode())) {
-                $errors[$propertyPath]['code'] = $violation->getCode();
-            }
         }
 
         return $errors;
